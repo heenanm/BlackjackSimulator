@@ -9,7 +9,7 @@ namespace BlackjackSimulator
     // Create a class called Deck with 52 cards.
     // Pass a collection of decks int class Shoe.
     // Expose a value on card (numerical value type int).
-    // Create hand class - Collection of cards. Method add card. Numerical value of hand.
+    // Create hand class - Collection of cards. Method add card. Numerical value of hand. Dictionary for values. Bool isBust.
     public class Game
     {
         public static void Play()
@@ -77,6 +77,37 @@ namespace BlackjackSimulator
 
     public class Hand
     {
+        private List<Card> _cards;
+
+        public IReadOnlyCollection<Card> Cards => _cards;
+
+        public int Score { get; }
+        public Hand()
+        {
+            var hand = new List<Card>();
+            var handValue = HandValue();
+
+            _cards = hand;
+            Score = handValue;
+
+        }
+
+        private void AddCard(Card card)
+        {
+            _cards.Add(card);
+        }
+
+        private int HandValue()
+        {
+            var score = 0;
+
+            foreach (var card in Cards)
+            {
+                var value = (int)card.Rank;
+                score += value ;
+            }
+            return score;
+        }
     }
 
     public class Shoe

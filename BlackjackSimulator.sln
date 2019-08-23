@@ -14,6 +14,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution items", "Solution 
 		.gitignore = .gitignore
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlackjackSimulator.UnitTests", "test\BlackjackSimulator.UnitTests\BlackjackSimulator.UnitTests.csproj", "{4F1836B8-1CD6-4EAE-B8D6-579343C8AE27}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,12 +26,17 @@ Global
 		{12C05214-F9D2-4B5E-824C-8268654CD822}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{12C05214-F9D2-4B5E-824C-8268654CD822}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{12C05214-F9D2-4B5E-824C-8268654CD822}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F1836B8-1CD6-4EAE-B8D6-579343C8AE27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F1836B8-1CD6-4EAE-B8D6-579343C8AE27}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F1836B8-1CD6-4EAE-B8D6-579343C8AE27}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F1836B8-1CD6-4EAE-B8D6-579343C8AE27}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{12C05214-F9D2-4B5E-824C-8268654CD822} = {7898F1FB-802A-4B39-B997-4364AA68AACB}
+		{4F1836B8-1CD6-4EAE-B8D6-579343C8AE27} = {546BC6ED-6CF7-41CF-BDDE-54EECB51DF5B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C1D55373-BA07-42A7-ABFB-AA532D6CEED3}
