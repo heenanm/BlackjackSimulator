@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 
 namespace BlackjackSimulator
 {
@@ -84,9 +83,27 @@ namespace BlackjackSimulator
         public int Score { get; }
         public Hand()
         {
+            var handValues = new Dictionary<Rank , int>
+            {
+                {Rank.Ace, 1 },
+                {Rank.Two, 2 },
+                {Rank.Three, 3 },
+                {Rank.Four, 4 },
+                {Rank.Five, 5 },
+                {Rank.Six, 6 },
+                {Rank.Seven, 7 },
+                {Rank.Eight, 8 },
+                {Rank.Nine, 9 },
+                {Rank.Ten, 10 },
+                {Rank.Ten, 10 },
+                {Rank.Ten, 10 },
+                {Rank.Ten, 10 },
+            };
+
             var hand = new List<Card>();
             var handValue = HandValue();
-
+            var isBust = false;
+ 
             _cards = hand;
             Score = handValue;
 
