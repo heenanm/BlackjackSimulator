@@ -4,16 +4,14 @@ using System.Linq;
 
 namespace BlackjackSimulator
 {
-    // Implement Rank and add to card. 
-    // Create a class called Deck with 52 cards.
-    // Pass a collection of decks int class Shoe.
-    // Expose a value on card (numerical value type int).
-    // Create hand class - Collection of cards. Method add card. Numerical value of hand. Dictionary for values. Bool isBust.
     public class Game
     {
         public static void Play()
         {
             var deck = new Deck();
+            var hand = new Hand();
+            hand.AddCard(new Card(Suit.Clubs, Rank.Ace));
+            var score = hand.Score;
         }
     }
 
@@ -27,7 +25,6 @@ namespace BlackjackSimulator
 
     public enum Rank
     {
-        Ace,
         Two,
         Three,
         Four,
@@ -39,7 +36,8 @@ namespace BlackjackSimulator
         Ten,
         Jack,
         Queen,
-        King
+        King,
+        Ace
     }
 
     public class Card
@@ -76,54 +74,61 @@ namespace BlackjackSimulator
 
     public class Hand
     {
-        private List<Card> _cards;
+        private readonly List<Card> _cards;
+        private static readonly Dictionary<Rank, int> _rankValues;
 
         public IReadOnlyCollection<Card> Cards => _cards;
 
-        public int Score { get; }
+        public bool IsBust => Score > 21;
+
+        public int Score
+        {
+            get
+            {
+                var score = 0;
+
+                foreach (var card in _cards)
+                {
+                    score += _rankValues[card.Rank];
+
+                    if (score > 21 && card.Rank == Rank.Ace)
+                    {
+                        score -= 10;
+                    }
+                }
+
+                return score;
+            }
+        }
+
+        static Hand()
+        {
+            _rankValues = new Dictionary<Rank, int>
+            {
+                { Rank.Two, 2 },
+                { Rank.Three, 3 },
+                { Rank.Four, 4 },
+                { Rank.Five, 5 },
+                { Rank.Six, 6 },
+                { Rank.Seven, 7 },
+                { Rank.Eight, 8 },
+                { Rank.Nine, 9 },
+                { Rank.Ten, 10 },
+                { Rank.Jack, 10 },
+                { Rank.Queen, 10 },
+                { Rank.King, 10 },
+                { Rank.Ace, 11 },
+            };
+        }
+
         public Hand()
         {
-            var handValues = new Dictionary<Rank , int>
-            {
-                {Rank.Ace, 1 },
-                {Rank.Two, 2 },
-                {Rank.Three, 3 },
-                {Rank.Four, 4 },
-                {Rank.Five, 5 },
-                {Rank.Six, 6 },
-                {Rank.Seven, 7 },
-                {Rank.Eight, 8 },
-                {Rank.Nine, 9 },
-                {Rank.Ten, 10 },
-                {Rank.Ten, 10 },
-                {Rank.Ten, 10 },
-                {Rank.Ten, 10 },
-            };
-
-            var hand = new List<Card>();
-            var handValue = HandValue();
-            var isBust = false;
- 
-            _cards = hand;
-            Score = handValue;
-
+            _cards = new List<Card>();
         }
 
-        private void AddCard(Card card)
+        public void AddCard(Card card)
         {
             _cards.Add(card);
-        }
-
-        private int HandValue()
-        {
-            var score = 0;
-
-            foreach (var card in Cards)
-            {
-                var value = (int)card.Rank;
-                score += value ;
-            }
-            return score;
         }
     }
 
@@ -152,7 +157,7 @@ namespace BlackjackSimulator
     {
     }
 
-    public class Dealer 
+    public class Dealer
     {
     }
 }
