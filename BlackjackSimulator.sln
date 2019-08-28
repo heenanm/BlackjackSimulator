@@ -5,16 +5,17 @@ VisualStudioVersion = 16.0.29215.179
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{7898F1FB-802A-4B39-B997-4364AA68AACB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlackjackSimulator", "src\BlackjackSimulator\BlackjackSimulator.csproj", "{12C05214-F9D2-4B5E-824C-8268654CD822}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlackjackSimulator", "src\BlackjackSimulator\BlackjackSimulator.csproj", "{12C05214-F9D2-4B5E-824C-8268654CD822}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{546BC6ED-6CF7-41CF-BDDE-54EECB51DF5B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution items", "Solution items", "{AA663834-9383-454D-B8DE-ABD15244F4DB}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
+		TODOList.md = TODOList.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlackjackSimulator.UnitTests", "test\BlackjackSimulator.UnitTests\BlackjackSimulator.UnitTests.csproj", "{4F1836B8-1CD6-4EAE-B8D6-579343C8AE27}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlackjackSimulator.UnitTests", "test\BlackjackSimulator.UnitTests\BlackjackSimulator.UnitTests.csproj", "{4F1836B8-1CD6-4EAE-B8D6-579343C8AE27}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

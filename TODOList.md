@@ -1,0 +1,12 @@
+- Shoe
+  - Need a discard pile shuffle to take these into account
+  - Need a method to put hands into discard pile.
+- Hand
+  - Need a way to check if blackjack, is bust, is pairs, is soft.
+  - If pairs a way to split the Hand
+  - bets on hand
+- Player
+  - ctor, hands money etc
+  - methods
+- Dealer
+- 
