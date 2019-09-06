@@ -10,6 +10,7 @@ namespace BlackjackSimulator.UnitTests
             var actual = new Deck();
 
             Assert.AreEqual(52, actual.Cards.Count);
+            
             // TODO test right quantity of card
         }
     }

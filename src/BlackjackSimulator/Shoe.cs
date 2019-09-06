@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace BlackjackSimulator
 {
     public class Shoe
     {
-        private List<Card> _cards;
+        private readonly List<Card> _disposedCards;
+        private readonly List<Card> _cards;
         public IReadOnlyCollection<Card> Cards => _cards;
 
         public Shoe(int deckCount)
@@ -24,6 +24,8 @@ namespace BlackjackSimulator
         
         public void Shuffle()
         {
+            _cards.AddRange(_disposedCards);
+            _disposedCards.Clear();
             _cards = _cards.OrderBy(c => Guid.NewGuid())
                 .ToList();
         }
@@ -34,6 +36,11 @@ namespace BlackjackSimulator
             _cards.RemoveAll(c => c.Id == card.Id);
 
             return card;
+        }
+
+        public void DisposeCards(IReadOnlyCollection<Card> cards)
+        {
+            _disposedCards.AddRange(cards);
         }
     }
 }

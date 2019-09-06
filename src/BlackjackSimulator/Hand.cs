@@ -1,15 +1,25 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace BlackjackSimulator
 {
-    class Hand
+    public class Hand
     {
+        private List<Card> _splitCards; 
         private readonly List<Card> _cards;
         private static readonly Dictionary<Rank, int> _rankValues;
 
         public IReadOnlyCollection<Card> Cards => _cards;
 
+        public IReadOnlyCollection<Card> SplitCards => _splitCards;
+
         public bool IsBust => Score > 21;
+
+        public bool IsBlackjack => Score == 21 && _cards.Count == 2;
+
+        public bool IsSoft => _cards.Count == 2 && _cards.Any(card => card.Rank == Rank.Ace);
+
+        public bool IsPair => _cards.Count == 2 && _cards.All();
 
         public int Score
         {
@@ -59,6 +69,18 @@ namespace BlackjackSimulator
         public void AddCard(Card card)
         {
             _cards.Add(card);
+        }
+
+        public void SplitHand()
+        {
+            if (!IsPair) return;
+            _splitCards.Add(_cards[0]);
+            _cards.RemoveAt(0);
+        }
+
+        public int BetOnHand()
+        {
+            return 0;
         }
     }
 }
