@@ -13,31 +13,29 @@ namespace BlackjackSimulator
 
         public IReadOnlyCollection<Card> SplitCards => _splitCards;
 
-        public bool IsBust => Score > 21;
+        public bool IsBust => Value > 21;
 
-        public bool IsBlackjack => Score == 21 && _cards.Count == 2;
+        public bool IsBlackjack => Value == 21 && _cards.Count == 2;
 
-        public bool IsSoft => _cards.Count == 2 && _cards.Any(card => card.Rank == Rank.Ace);
+        public bool IsPair => _cards.Count == 2 && _cards[0].Rank == _cards[1].Rank;
 
-        public bool IsPair => _cards.Count == 2 && _cards.All();
-
-        public int Score
+        public int Value
         {
             get
             {
-                var score = 0;
+                var value = 0;
 
                 foreach (var card in _cards)
                 {
-                    score += _rankValues[card.Rank];
+                    value += _rankValues[card.Rank];
 
-                    if (score > 21 && card.Rank == Rank.Ace)
+                    if (value > 21 && card.Rank == Rank.Ace)
                     {
-                        score -= 10;
+                        value -= 10;
                     }
                 }
 
-                return score;
+                return value;
             }
         }
 

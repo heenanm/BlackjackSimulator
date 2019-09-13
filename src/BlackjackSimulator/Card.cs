@@ -1,32 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Reflection;
 
 namespace BlackjackSimulator
 {
-    public enum Suit
-    {
-        Hearts,
-        Diamonds,
-        Clubs,
-        Spades
-    }
-
-    public enum Rank
-    {
-        Two,
-        Three,
-        Four,
-        Five,
-        Six,
-        Seven,
-        Eight,
-        Nine,
-        Ten,
-        Jack,
-        Queen,
-        King,
-        Ace
-    }
     public class Card
     {
         public Guid Id { get;  }
@@ -38,6 +16,21 @@ namespace BlackjackSimulator
             Id = Guid.NewGuid();
             Suit = suit;
             Rank = rank;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (!(obj is Card card))
+            {
+                return false;
+            }
+
+            return Id == card.Id;
+        }
+
+        public override string ToString()
+        {
+            return $"{Rank.GetDescription()}{Suit.GetDescription()}";
         }
     }
 }

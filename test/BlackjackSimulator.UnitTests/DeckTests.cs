@@ -1,17 +1,22 @@
-﻿using NUnit.Framework;
+﻿using System.Linq;
+using NUnit.Framework;
 
 namespace BlackjackSimulator.UnitTests
 {
     public class DeckTests
     {
         [Test]
-        public void DeckTest_ctor()
+        public void Deck_ctor()
         {
-            var actual = new Deck();
-
-            Assert.AreEqual(52, actual.Cards.Count);
+            // Arrange 
+            var deckCards = new Deck();
             
-            // TODO test right quantity of card
+            // Act
+            
+
+            // Assert
+            Assert.AreEqual(52, deckCards.Cards.Count);
+            Assert.True(deckCards.Cards.GroupBy(i => i).Count() == deckCards.Cards.Count);
         }
     }
 }

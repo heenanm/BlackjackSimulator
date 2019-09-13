@@ -1,28 +1,73 @@
-﻿using System.Reflection.Metadata;
+﻿using System.Collections.Generic;
+using System.Linq;
+using FluentAssertions;
 using NUnit.Framework;
 
 namespace BlackjackSimulator.UnitTests
 {
     public class ShoeTests
     {
-        [TestCase(1, 1 * 52)]
-        [TestCase(2, 2 * 52)]
-        [TestCase(3, 3 * 52)]
-        [TestCase(4, 4 * 52)]
-        [TestCase(5, 5 * 52)]
-        [TestCase(6, 6 * 52)]
-        public void ShoeTest_ctor(int n, int expected)
+        [TestCase(1)]
+        [TestCase(2)]
+        [TestCase(3)]
+        [TestCase(4)]
+        [TestCase(5)]
+        [TestCase(6)]
+        public void Shoe_ctor(int deckCount)
         {
-            var actual = new Shoe(n);
+            // Arrange
+            var decks = new List<Deck>();
 
-            Assert.AreEqual(expected, actual.Cards.Count);
+            for (var i = 0; i < deckCount; i++)
+            {
+                decks.Add(new Deck());
+            }
+
+            var cards = decks.SelectMany(d => d.Cards.ToList())
+                .ToList();
+
+            // Act
+            var shoe = new Shoe(decks);
+
+            // Assert
+            Assert.AreEqual(cards.Count, shoe.Cards.Count);
+            Assert.That(cards, Is.EquivalentTo(shoe.Cards));
+            Assert.False(cards.SequenceEqual(shoe.Cards));
         }
 
         [Test]
-        public void ShoeTest_Shuffle()
+        public void Shoe_Shuffle()
         {
-            //Shoe.SequenceEqual(ShoeAfterShuffle) 
-            // TODO check card order changed after shuffle, using Id's
+            // Arrange
+            var shoe = new Shoe(new [] { new Deck() });
+            var cards = shoe.Cards.ToList();
+
+            // Act
+            shoe.Shuffle();
+
+            // Assert
+            var shuffledCards = shoe.Cards.ToList();
+
+            Assert.AreEqual(cards.Count, shuffledCards.Count);
+            Assert.That(cards, Is.EquivalentTo(shuffledCards));
+            Assert.False(cards.SequenceEqual(shuffledCards));
+            cards.SequenceEqual(shuffledCards).Should().BeFalse();
+        }
+
+        [Test]
+        public void Shoe_TakeCard()
+        {
+            // Arrange
+            var shoe = new Shoe(new[] { new Deck() });
+            var cards = shoe.Cards.ToList();
+            
+            // Act
+            var card = shoe.TakeCard();
+
+            // Assert 
+            Assert.AreEqual(cards.Count - 1, shoe.Cards.Count);
+            Assert.AreEqual(cards[0], card);
+            Assert.False(shoe.Cards.Contains(card));
         }
     }
 }
