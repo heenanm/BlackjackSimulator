@@ -7,12 +7,17 @@ namespace BlackjackSimulator
     public class Player
     {
         private List<Card> _cards;
+        private int _playerBank;
+        private int _bet;
+        private Hand _hand;
+
+        public int PlayerBank => _playerBank;
         public IReadOnlyCollection<Card> Cards => _cards;
-        Player()
+        Player(int startingBank)
         {
+            _playerBank = startingBank;
             var hand = new Hand();
-            var bank = 0;
-            
+            _hand = hand;
         }
 
         public void Hit()
@@ -30,9 +35,18 @@ namespace BlackjackSimulator
 
         }
 
-        public int Bet()
+        public bool Bet(int bet)
         {
-            return 0;
+            var betPlaced = false;
+
+            if (_playerBank >= bet)
+            {
+                _playerBank -= bet;
+                _bet = bet;
+                betPlaced = true;
+            }
+
+            return betPlaced;
         }
     }
 }

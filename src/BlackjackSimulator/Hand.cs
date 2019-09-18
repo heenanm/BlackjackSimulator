@@ -76,9 +76,9 @@ namespace BlackjackSimulator
             _cards.RemoveAt(0);
         }
 
-        public int BetOnHand()
+        public int BetOnHand(int bet)
         {
-            return 0;
+            return bet;
         }
     }
 }
