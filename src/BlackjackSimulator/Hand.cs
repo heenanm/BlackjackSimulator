@@ -8,7 +8,7 @@ namespace BlackjackSimulator
         private List<Card> _splitCards; 
         private readonly List<Card> _cards;
         private static readonly Dictionary<Rank, int> _rankValues;
-
+        private readonly int _bet;
         public IReadOnlyCollection<Card> Cards => _cards;
 
         public IReadOnlyCollection<Card> SplitCards => _splitCards;
@@ -59,8 +59,9 @@ namespace BlackjackSimulator
             };
         }
 
-        public Hand()
+        public Hand(int bet)
         {
+            _bet = bet;
             _cards = new List<Card>();
         }
 
@@ -76,9 +77,5 @@ namespace BlackjackSimulator
             _cards.RemoveAt(0);
         }
 
-        public int BetOnHand(int bet)
-        {
-            return bet;
-        }
     }
 }

@@ -27,7 +27,8 @@ namespace BlackjackSimulator.UnitTests
                 .ToList();
 
             // Act
-            var shoe = new Shoe(decks);
+            //var shoe = new Shoe(decks);
+            var shoe = new Shoe(deckCount);
 
             // Assert
             Assert.AreEqual(cards.Count, shoe.Cards.Count);
@@ -39,7 +40,8 @@ namespace BlackjackSimulator.UnitTests
         public void Shoe_Shuffle()
         {
             // Arrange
-            var shoe = new Shoe(new [] { new Deck() });
+            //var shoe = new Shoe(new [] { new Deck() });
+            var shoe = new Shoe();
             var cards = shoe.Cards.ToList();
 
             // Act
@@ -58,7 +60,8 @@ namespace BlackjackSimulator.UnitTests
         public void Shoe_TakeCard()
         {
             // Arrange
-            var shoe = new Shoe(new[] { new Deck() });
+            //var shoe = new Shoe(new[] { new Deck() });
+            var shoe = new Shoe();
             var cards = shoe.Cards.ToList();
             
             // Act

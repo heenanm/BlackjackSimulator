@@ -17,7 +17,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlackjackSimulator.UnitTests", "test\BlackjackSimulator.UnitTests\BlackjackSimulator.UnitTests.csproj", "{4F1836B8-1CD6-4EAE-B8D6-579343C8AE27}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlackjackUI", "src\BlackjackUI\BlackjackUI.csproj", "{AFAE58C3-5239-454B-83C3-1034D92AD5EF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlackjackSimulator.ConsoleUI", "src\BlackjackUI\BlackjackSimulator.ConsoleUI.csproj", "{AFAE58C3-5239-454B-83C3-1034D92AD5EF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

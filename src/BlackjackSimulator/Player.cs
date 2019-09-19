@@ -1,38 +1,49 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices.ComTypes;
 
 namespace BlackjackSimulator
 {
     public class Player
     {
-        private List<Card> _cards;
         private int _playerBank;
         private int _bet;
-        private Hand _hand;
+        public Hand Hand;
 
+        public string PlayerName { get; private set; }
         public int PlayerBank => _playerBank;
-        public IReadOnlyCollection<Card> Cards => _cards;
-        Player(int startingBank)
+        public IReadOnlyCollection<Card> Cards => Hand.Cards;
+
+        public Player(int startingBank, string playerName)
         {
             _playerBank = startingBank;
-            var hand = new Hand();
-            _hand = hand;
+            PlayerName = playerName;
         }
 
-        public void Hit()
+        public void HitOrStand(Shoe shoe, bool wantsToStand)
         {
-
+            if (wantsToStand)
+            {
+                Console.Write($"Player Stood on: {Hand.Value}");
+                return;
+            }
+            
+            Hand.AddCard(shoe.TakeCard());
+            ShowHand();
+            if (Hand.IsBust)
+            {
+                Console.WriteLine("Player has bust!"); //Deal with disposal of cards.
+            }
         }
 
-        public void Stand()
+        public int Stand()
         {
-
+            return Hand.Value;
         }
 
         public void Split()
         {
-
+            Hand.SplitHand();
         }
 
         public bool Bet(int bet)
@@ -47,6 +58,41 @@ namespace BlackjackSimulator
             }
 
             return betPlaced;
+        }
+
+        public void ShowHand()
+        {
+            // Add in Hand value
+            Console.Write("Player Hand: ");
+            foreach (var card in Cards)
+            {
+                if (card.Suit == Suit.Hearts || card.Suit == Suit.Diamonds)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+
+                    Console.Write($"{card} ");
+
+                    Console.ForegroundColor = ConsoleColor.White;
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Black;
+
+                    Console.Write($"{card} ");
+
+                    Console.ForegroundColor = ConsoleColor.White;
+                }
+            }
+
+        }
+
+        public void Play(Shoe shoe)
+        {
+            var bet = 5;
+            Hand = new Hand(bet);
+            _playerBank -= bet;
+            Hand.AddCard(shoe.TakeCard());
+            Hand.AddCard(shoe.TakeCard());
         }
     }
 }
