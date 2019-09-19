@@ -83,7 +83,7 @@ namespace BlackjackSimulator
                     Console.ForegroundColor = ConsoleColor.White;
                 }
             }
-
+            Console.WriteLine();
         }
 
         public void Play(Shoe shoe)
