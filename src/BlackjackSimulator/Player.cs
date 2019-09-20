@@ -7,9 +7,10 @@ namespace BlackjackSimulator
     public class Player
     {
         private int _playerBank;
-        private int _bet;
-        public Hand Hand;
 
+        public bool IsStood { get; set; }
+        public bool BetPlaced { get; set; }
+        public Hand Hand;
         public string PlayerName { get; private set; }
         public int PlayerBank => _playerBank;
         public IReadOnlyCollection<Card> Cards => Hand.Cards;
@@ -18,27 +19,7 @@ namespace BlackjackSimulator
         {
             _playerBank = startingBank;
             PlayerName = playerName;
-        }
-
-        public void HitOrStand(Shoe shoe, bool wantsToStand)
-        {
-            if (wantsToStand)
-            {
-                Console.Write($"Player Stood on: {Hand.Value}");
-                return;
-            }
-            
-            Hand.AddCard(shoe.TakeCard());
-            ShowHand();
-            if (Hand.IsBust)
-            {
-                Console.WriteLine("Player has bust!"); //Deal with disposal of cards.
-            }
-        }
-
-        public int Stand()
-        {
-            return Hand.Value;
+            IsStood = false;
         }
 
         public void Split()
@@ -46,18 +27,14 @@ namespace BlackjackSimulator
             Hand.SplitHand();
         }
 
-        public bool Bet(int bet)
+        public void PlaceBet(int takeFromBank)
         {
-            var betPlaced = false;
+            _playerBank -= takeFromBank;
+        }
 
-            if (_playerBank >= bet)
-            {
-                _playerBank -= bet;
-                _bet = bet;
-                betPlaced = true;
-            }
-
-            return betPlaced;
+        public void DepositWinnings(int bankWinnings)
+        {
+            _playerBank += bankWinnings;
         }
 
         public void ShowHand()
@@ -83,16 +60,9 @@ namespace BlackjackSimulator
                     Console.ForegroundColor = ConsoleColor.White;
                 }
             }
-            Console.WriteLine();
-        }
 
-        public void Play(Shoe shoe)
-        {
-            var bet = 5;
-            Hand = new Hand(bet);
-            _playerBank -= bet;
-            Hand.AddCard(shoe.TakeCard());
-            Hand.AddCard(shoe.TakeCard());
+            Console.Write($"Current Hand Value: {Hand.Value}\n\n");
+            
         }
     }
 }

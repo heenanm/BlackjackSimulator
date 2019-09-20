@@ -9,7 +9,8 @@ namespace BlackjackSimulator.ConsoleUI
             Console.ForegroundColor = ConsoleColor.White;
             Console.BackgroundColor = ConsoleColor.DarkGreen;
             Console.Clear();
-            var table = new Table();
+
+            var table = new Table(5);
             
             var player = new Player(10000, "Fred");
             
@@ -19,9 +20,9 @@ namespace BlackjackSimulator.ConsoleUI
             Console.WriteLine("Do you want to play this hand?");
             Console.ReadLine();
 
-            player.Play(table.Shoe);
+            table.TableDealer.DealToDealer(table);
 
-            table.TableDealer.Play(table.Shoe);
+            table.TableDealer.DealToPlayer(player, table);
             table.TableDealer.FirstShowHand();
             // Dealer asks if player wants to double bet?
 
@@ -33,20 +34,35 @@ namespace BlackjackSimulator.ConsoleUI
                 Console.WriteLine("Player has Blackjack - You Win!");
             }
 
-            Console.WriteLine("Player Hit or Stand? (Enter H or S): ");
-
-            var decision = Console.ReadLine();
-            if (decision == "H" || decision == "h")
+            while (!player.IsStood  && !player.Hand.IsBust && !player.Hand.IsBlackjack)
             {
-                player.HitOrStand(table.Shoe, false);
+                Console.WriteLine("Player Hit or Stand? (Enter H or S): ");
+
+                var decision = Console.ReadLine();
+                if (decision == "H" || decision == "h")
+                {
+                    table.TableDealer.PlayerHitOrStand(player, table, false);
+                }
+                else if (decision == "S" || decision == "s")
+                {
+                    table.TableDealer.PlayerHitOrStand(player, table, true);
+                }
+                // Handle invalid input
             }
-            else if (decision == "S" || decision == "s")
+
+            if (!player.Hand.IsBust)
             {
-                player.HitOrStand(table.Shoe, true);
+                table.TableDealer.PlayDealersHand(table);
             }
-            // Handle invalid input
 
-
+            if (player.Hand.Value > table.TableDealer.Hand.Value && !player.Hand.IsBust || table.TableDealer.Hand.IsBust)
+            {
+                Console.WriteLine("You are a winner!!!");
+            }
+            else
+            {
+                Console.WriteLine("You lose!");
+            }
         }
     }
 }

@@ -10,7 +10,6 @@ namespace BlackjackSimulator
         private readonly List<Card> _cards;
         public IReadOnlyCollection<Card> Cards => _cards;
 
-        //public Shoe(IEnumerable<Deck> decks)
         public Shoe(int numberOfDecks = 4)
         {
             var decks = new List<Deck>();

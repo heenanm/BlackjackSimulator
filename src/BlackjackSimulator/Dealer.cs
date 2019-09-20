@@ -6,13 +6,13 @@ namespace BlackjackSimulator
 {
     public class Dealer
     {
-        public int Bank { get; private set; }
         public Hand Hand;
-
+        public string Name { get;}
         public IReadOnlyCollection<Card> Cards => Hand.Cards;
+
         public Dealer()
         {
-            Bank = 10000;
+            Name = "Dealer";
         }
 
         public void FirstShowHand()
@@ -22,7 +22,7 @@ namespace BlackjackSimulator
             {
                 Console.ForegroundColor = ConsoleColor.Red;
 
-                Console.Write($"{Cards.ElementAt(1)}\n");
+                Console.Write($"{Cards.ElementAt(1)}\n\n");
 
                 Console.ForegroundColor = ConsoleColor.White;
             }
@@ -30,7 +30,7 @@ namespace BlackjackSimulator
             {
                 Console.ForegroundColor = ConsoleColor.Black;
 
-                Console.Write($"{Cards.ElementAt(1)}\n");
+                Console.Write($"{Cards.ElementAt(1)}\n\n");
 
                 Console.ForegroundColor = ConsoleColor.White;
             }
@@ -59,19 +59,56 @@ namespace BlackjackSimulator
             }
         }
 
-        public void Play(Shoe shoe)
+        public void PlayDealersHand(Table table)
         {
-            Hand = new Hand(0);
-            Hand.AddCard(shoe.TakeCard());
-            Hand.AddCard(shoe.TakeCard());
+            while (Hand.Value <= 17 && !Hand.IsBust)
+            {
+                Hand.AddCard(table.Shoe.TakeCard());
+            }
+            Console.Write($"Dealers Hand: ");
+            ShowHand();
+            Console.Write($"Dealers Hand Value: {Hand.Value}\n\n");
+            if (Hand.IsBust)
+            {
+                Console.Write("Dealer Busts!\n\n");
+            }
         }
 
-        public void DealToPlayer(Player player, Shoe shoe)
+        public void DealToPlayer(Player player, Table table)
         {
-            //player.Bet(table.minimumBet);
-            player.Hand.AddCard(shoe.TakeCard());
-            player.Hand.AddCard(shoe.TakeCard());
+            player.Hand = new Hand();
+            player.Hand.Bet(player, table.MinimumBet);
+            player.Hand.AddCard(table.Shoe.TakeCard());
+            player.Hand.AddCard(table.Shoe.TakeCard());
         }
+
+        public void DealToDealer(Table table)
+        {
+            Hand = new Hand();
+            Hand.AddCard(table.Shoe.TakeCard());
+            Hand.AddCard(table.Shoe.TakeCard());
+        }
+
+        public void PlayerHitOrStand(Player player,Table table, bool wantsToStand)
+        {
+            if (wantsToStand)
+            {
+                player.ShowHand();
+                Console.Write($"Player Stood on: {player.Hand.Value}\n\n");
+                player.IsStood = true;
+                return;
+            }
+
+            player.Hand.AddCard(table.Shoe.TakeCard());
+            player.ShowHand();
+
+            if (player.Hand.IsBust)
+            {
+                Console.Write("Player has bust!\n\n"); //Deal with disposal of cards.
+            }
+        }
+
+
 
     }
 }
