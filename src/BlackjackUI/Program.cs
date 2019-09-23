@@ -13,9 +13,16 @@ namespace BlackjackSimulator.ConsoleUI
 
             //Initialise Variables to play the game
             var table = new Table(10);
+            Console.Write($"Minimum bet at this table is: {table.MinimumBet}\n\n");
+
+            //Console.WriteLine("Enter number of Players 1 - 7: ");
+            //var numberOfPlayers = Console.ReadLine();
+
             var player = new Player(10000, "Fred");
+            var player1 = new Player(10000, "John");
             var dealer = table.TableDealer;
             table.AddPlayer(player);
+            table.AddPlayer(player1);
 
             //Start game loop 
             while (player.PlayerBank > table.MinimumBet && player.WantsToPlay)
@@ -23,13 +30,19 @@ namespace BlackjackSimulator.ConsoleUI
 
                 player.IsStood = false;
 
+                dealer.AskPlayersToBet(table);
+
                 dealer.InitialDeal(table);
-            
+
                 dealer.FirstShowHand();
-                // Dealer asks if player wants to double bet?
+
+                foreach (var currentPlayer in table.Players)
+                {
+                    currentPlayer.ShowHand();
+                }
 
 
-                player.ShowHand();
+                
 
                 if (player.Hand.IsBlackjack) 
                 {
@@ -59,13 +72,19 @@ namespace BlackjackSimulator.ConsoleUI
 
                 if (player.Hand.Value > table.TableDealer.Hand.Value && !player.Hand.IsBust || table.TableDealer.Hand.IsBust)
                 {
-                    Console.WriteLine("You are a winner!!!");
+                    Console.Write("You are a winner!!! \n\n");
                     player.DepositWinnings(Convert.ToInt32(player.Hand.BetOnHand * 2));
-
+                    player.NumberOfWins ++;
                 }
                 else
                 {
-                    Console.WriteLine("You lose!");
+                    Console.Write("You lose!\n\n");
+                    player.NumberOfLosses ++;
+                }
+
+                foreach (var currentPlayer in table.Players)
+                {
+                    currentPlayer.ShowPlayerStats();
                 }
 
                 dealer.AskPlayersPlayAgain(table.Players);

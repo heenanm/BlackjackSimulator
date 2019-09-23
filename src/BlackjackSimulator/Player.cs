@@ -8,6 +8,11 @@ namespace BlackjackSimulator
     {
         private int _playerBank;
 
+        public bool IsBankrupt { get; set; }
+        public int StartingBalance { get; set; }
+        public int NumberOfWins { get; set; }
+        public int NumberOfLosses { get; set; }
+        public int NumberOfHandsPlayed { get; set; }
         public bool WantsToPlay = true;
         public bool IsStood { get; set; }
         public bool BetPlaced { get; set; }
@@ -21,6 +26,11 @@ namespace BlackjackSimulator
             _playerBank = startingBank;
             PlayerName = playerName;
             IsStood = false;
+            NumberOfHandsPlayed = 0;
+            NumberOfWins = 0;
+            NumberOfLosses = 0;
+            StartingBalance = startingBank;
+            IsBankrupt = false;
         }
 
         public void Split()
@@ -41,7 +51,7 @@ namespace BlackjackSimulator
         public void ShowHand()
         {
             // Add in Hand value
-            Console.Write("Player Hand: ");
+            Console.Write($"{PlayerName} Hand: ");
             foreach (var card in Cards)
             {
                 if (card.Suit == Suit.Hearts || card.Suit == Suit.Diamonds)
@@ -62,8 +72,13 @@ namespace BlackjackSimulator
                 }
             }
 
-            Console.Write($"Current Hand Value: {Hand.Value}\n\n");
+            Console.Write($"Current Hand Value: {Hand.Value} Current bet on Hand {Hand.BetOnHand}\n\n");
             
+        }
+
+        public void ShowPlayerStats()
+        {
+            Console.Write($"{PlayerName} Current Statistics:\nHands Played: {NumberOfHandsPlayed} Hands Won: {NumberOfWins} Hands Lost {NumberOfLosses}\n\n");
         }
     }
 }

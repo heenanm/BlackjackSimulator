@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace BlackjackSimulator
@@ -72,7 +73,7 @@ namespace BlackjackSimulator
             _cards.RemoveAt(0);
         }
 
-        public void Bet(Player player, int bet)
+        public void PlaceBetOnHand(Player player, int bet)
         {
             player.BetPlaced = false;
 
@@ -82,5 +83,6 @@ namespace BlackjackSimulator
             BetOnHand += bet;
             player.BetPlaced = true;
         }
+
     }
 }

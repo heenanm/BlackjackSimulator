@@ -74,13 +74,25 @@ namespace BlackjackSimulator
             }
         }
 
+        public void CheckPlayerBanks(Table table)
+        {
+            foreach (var player in table.Players)
+            {
+                if (player.PlayerBank < table.MinimumBet)
+                {
+                    player.IsBankrupt = true;
+                }
+            }
+        }
+
         public void InitialDeal(Table table)
         {
             foreach (var player in table.Players)
             {
-                if (player.WantsToPlay)
+                if (player.WantsToPlay && !player.IsBankrupt)
                 {
                     player.Hand = new Hand();
+                    player.NumberOfHandsPlayed ++;
                     player.Hand.AddCard(table.Shoe.TakeCard());
                 }
             }
@@ -90,7 +102,7 @@ namespace BlackjackSimulator
 
             foreach (var player in table.Players)
             {
-                if (player.WantsToPlay)
+                if (player.WantsToPlay && !player.IsBankrupt)
                 {
                     player.Hand.AddCard(table.Shoe.TakeCard());
                 }
@@ -99,17 +111,47 @@ namespace BlackjackSimulator
             Hand.AddCard(table.Shoe.TakeCard());
         }
 
+        public void AskPlayersToBet(Table table)
+        {
+            foreach (var player in table.Players)
+            {
+                var betAmount = 0;
+                if (!player.IsBankrupt)
+                Console.WriteLine($"{player.PlayerName} Would you like to Bet on this hand? Enter Y or N: ");
+                var playerDecision = Console.ReadLine().ToLower();
+
+                if (playerDecision == "y")
+                {
+                    player.WantsToPlay = true;
+                    while (betAmount < table.MinimumBet)
+                    {
+                        Console.WriteLine($"Table Minimum is: {table.MinimumBet}, How much would you like to bet?");
+                        betAmount = int.Parse(Console.ReadLine());
+                    }
+
+                    player.Hand.PlaceBetOnHand(player, betAmount);
+                }
+                if (playerDecision == "n")
+                {
+                    player.WantsToPlay = false;
+                }
+            }
+        }
+
         public void AskPlayersPlayAgain(List<Player> players)
         {
             // Dealer asks players if they want to play again
             foreach (var player in players)
             {
-                Console.WriteLine($"{player.PlayerName}: Do you want to play again? Enter Y or N: ");
-                var playerDecision = Console.ReadLine();
+                if(!player.IsBankrupt)
+                { 
+                    Console.WriteLine($"{player.PlayerName}: Do you want to play again? Enter Y or N: ");
+                    var playerDecision = Console.ReadLine();
 
-                if (playerDecision == "n")
-                {
-                    player.WantsToPlay = false;
+                    if (playerDecision == "n")
+                    {
+                        player.WantsToPlay = false;
+                    }
                 }
             }
            
