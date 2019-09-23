@@ -8,6 +8,7 @@ namespace BlackjackSimulator
     {
         private int _playerBank;
 
+        public bool WantsToPlay = true;
         public bool IsStood { get; set; }
         public bool BetPlaced { get; set; }
         public Hand Hand;

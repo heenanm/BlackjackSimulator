@@ -74,19 +74,45 @@ namespace BlackjackSimulator
             }
         }
 
-        public void DealToPlayer(Player player, Table table)
+        public void InitialDeal(Table table)
         {
-            player.Hand = new Hand();
-            player.Hand.Bet(player, table.MinimumBet);
-            player.Hand.AddCard(table.Shoe.TakeCard());
-            player.Hand.AddCard(table.Shoe.TakeCard());
-        }
+            foreach (var player in table.Players)
+            {
+                if (player.WantsToPlay)
+                {
+                    player.Hand = new Hand();
+                    player.Hand.AddCard(table.Shoe.TakeCard());
+                }
+            }
 
-        public void DealToDealer(Table table)
-        {
             Hand = new Hand();
             Hand.AddCard(table.Shoe.TakeCard());
+
+            foreach (var player in table.Players)
+            {
+                if (player.WantsToPlay)
+                {
+                    player.Hand.AddCard(table.Shoe.TakeCard());
+                }
+            }
+
             Hand.AddCard(table.Shoe.TakeCard());
+        }
+
+        public void AskPlayersPlayAgain(List<Player> players)
+        {
+            // Dealer asks players if they want to play again
+            foreach (var player in players)
+            {
+                Console.WriteLine($"{player.PlayerName}: Do you want to play again? Enter Y or N: ");
+                var playerDecision = Console.ReadLine();
+
+                if (playerDecision == "n")
+                {
+                    player.WantsToPlay = false;
+                }
+            }
+           
         }
 
         public void PlayerHitOrStand(Player player,Table table, bool wantsToStand)

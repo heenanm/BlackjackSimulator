@@ -11,7 +11,7 @@ namespace BlackjackSimulator
         public Dealer TableDealer;
         public Shoe Shoe;
 
-        public IReadOnlyCollection<Player> Players => _playersAtTable;
+        public List<Player> Players => _playersAtTable;
         public Table(int minimumBet)
         {
             MinimumBet = minimumBet;
