@@ -125,6 +125,8 @@ namespace BlackjackSimulator.ConsoleUI
                 {
                     gameActive = false;
                 }
+
+                dealer.CheckPlayerBanks(table);
             }
 
             Console.WriteLine("Game Over");

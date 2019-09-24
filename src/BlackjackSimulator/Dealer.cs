@@ -7,7 +7,7 @@ namespace BlackjackSimulator
     public class Dealer
     {
         public Hand Hand;
-        public string Name { get;}
+        public string Name { get; }
         public IReadOnlyCollection<Card> Cards => Hand.Cards;
 
         public Dealer()
@@ -94,7 +94,7 @@ namespace BlackjackSimulator
                 {
                     player.Hand = new Hand();
                     player.Hand.InitialBetOnHand(player);
-                    player.NumberOfHandsPlayed ++;
+                    player.NumberOfHandsPlayed++;
                     player.Hand.AddCard(table.Shoe.TakeCard());
                 }
             }
@@ -149,11 +149,15 @@ namespace BlackjackSimulator
             // Dealer asks players if they want to play again
             foreach (var player in table.Players)
             {
-                if(!player.IsBankrupt)
+                if (!player.IsBankrupt)
                 {
                     var playerDecision = string.Empty;
-                    do
+
+                    while (playerDecision == string.Empty) 
                     {
+                        Console.WriteLine($"{player.PlayerName}: Do you want to play again? Enter Y or N: ");
+                        playerDecision = Console.ReadLine().ToLower();
+
                         switch (playerDecision)
                         {
                             case "y":
@@ -163,36 +167,35 @@ namespace BlackjackSimulator
                                 player.WantsToPlay = false;
                                 break;
                             default:
-                                Console.WriteLine($"{player.PlayerName}: Do you want to play again? Enter Y or N: ");
-                                playerDecision = Console.ReadLine().ToLower();
+                                playerDecision = string.Empty;
                                 break;
                         }
-                    } while (playerDecision == string.Empty);
+                    }
                 }
             }
         }
 
-        public void PlayerHitOrStand(Player player,Table table, bool wantsToStand)
-        {
-            if (wantsToStand)
+            public void PlayerHitOrStand(Player player, Table table, bool wantsToStand)
             {
-                Console.Write($"{player.PlayerName} Stood on: {player.Hand.Value}\n\n");
-                player.IsStood = true;
-                Console.WriteLine("To Continue. Press Any key");
-                Console.ReadLine();
-                return;
-            }
+                if (wantsToStand)
+                {
+                    Console.Write($"{player.PlayerName} Stood on: {player.Hand.Value}\n\n");
+                    player.IsStood = true;
+                    Console.WriteLine("To Continue. Press Any key");
+                    Console.ReadLine();
+                    return;
+                }
 
-            player.Hand.AddCard(table.Shoe.TakeCard());
-            player.ShowHand();
+                player.Hand.AddCard(table.Shoe.TakeCard());
+                player.ShowHand();
 
-            if (player.Hand.IsBust)
-            {
-                Console.Write($"{player.PlayerName} has bust! You Lose.\n\n"); //Deal with disposal of cards.
-                player.NumberOfLosses ++;
-                Console.WriteLine("To Continue. Press Any key");
-                Console.ReadLine();
+                if (player.Hand.IsBust)
+                {
+                    Console.Write($"{player.PlayerName} has bust! You Lose.\n\n"); //Deal with disposal of cards.
+                    player.NumberOfLosses++;
+                    Console.WriteLine("To Continue. Press Any key");
+                    Console.ReadLine();
+                }
             }
         }
     }
-}
