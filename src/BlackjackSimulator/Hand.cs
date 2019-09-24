@@ -73,6 +73,12 @@ namespace BlackjackSimulator
             _cards.RemoveAt(0);
         }
 
+        public void InitialBetOnHand(Player player)
+        {
+            BetOnHand += player.BetBeforeDeal;
+            player.BetBeforeDeal = 0;
+        }
+
         public void PlaceBetOnHand(Player player, int bet)
         {
             player.BetPlaced = false;

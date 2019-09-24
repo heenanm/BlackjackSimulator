@@ -8,6 +8,7 @@ namespace BlackjackSimulator
     {
         private int _playerBank;
 
+        public int BetBeforeDeal { get; set; }
         public bool IsBankrupt { get; set; }
         public int StartingBalance { get; set; }
         public int NumberOfWins { get; set; }
@@ -31,6 +32,7 @@ namespace BlackjackSimulator
             NumberOfLosses = 0;
             StartingBalance = startingBank;
             IsBankrupt = false;
+            BetBeforeDeal = 0;
         }
 
         public void Split()
@@ -50,7 +52,6 @@ namespace BlackjackSimulator
 
         public void ShowHand()
         {
-            // Add in Hand value
             Console.Write($"{PlayerName} Hand: ");
             foreach (var card in Cards)
             {

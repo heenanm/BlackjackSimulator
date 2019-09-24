@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace BlackjackSimulator.ConsoleUI
 {
@@ -11,87 +12,122 @@ namespace BlackjackSimulator.ConsoleUI
             Console.BackgroundColor = ConsoleColor.DarkGreen;
             Console.Clear();
 
-            //Initialise Variables to play the game
+            // Initialise Variables to play the game
             var table = new Table(10);
             Console.Write($"Minimum bet at this table is: {table.MinimumBet}\n\n");
 
-            //Console.WriteLine("Enter number of Players 1 - 7: ");
-            //var numberOfPlayers = Console.ReadLine();
+            // Initialise players at the table.
+            var numberOfPlayers = 0;
+            while (numberOfPlayers <= 0 || numberOfPlayers > 7)
+            {
+                Console.WriteLine("Enter number of Players 1 - 7: ");
+                numberOfPlayers = int.Parse(Console.ReadLine());
+            }
 
-            var player = new Player(10000, "Fred");
-            var player1 = new Player(10000, "John");
+            for (int i = 1; i <= numberOfPlayers; i++)
+            {
+                Console.WriteLine($"Enter Player {i} Name: ");
+                var playerName = Console.ReadLine();
+                var player = new Player(1000, playerName);
+                table.AddPlayer(player);
+            }
+            
+            // Initialise the dealer.
             var dealer = table.TableDealer;
-            table.AddPlayer(player);
-            table.AddPlayer(player1);
+            
+            // Set game loop to active
+            bool gameActive = true;
 
             //Start game loop 
-            while (player.PlayerBank > table.MinimumBet && player.WantsToPlay)
+            while (gameActive)
             {
-
-                player.IsStood = false;
-
-                dealer.AskPlayersToBet(table);
-
-                dealer.InitialDeal(table);
-
-                dealer.FirstShowHand();
-
+                // Reset player stood property
                 foreach (var currentPlayer in table.Players)
                 {
-                    currentPlayer.ShowHand();
+                    currentPlayer.IsStood = false;
                 }
 
+                // Dealer asks players for initial bets.
+                dealer.AskPlayersToBet(table);
 
-                
+                // Dealer performs initial deal. 
+                dealer.InitialDeal(table);
 
-                if (player.Hand.IsBlackjack) 
+                // If any players want to play dealer shows his face card.
+                if (table.Players.Any(x => x.WantsToPlay))
                 {
-                    Console.WriteLine("Player has Blackjack - You Win!");
-                    player.DepositWinnings(Convert.ToInt32(player.Hand.BetOnHand * 2.5));
+                    dealer.FirstShowHand();
                 }
 
-                while (!player.IsStood  && !player.Hand.IsBust && !player.Hand.IsBlackjack)
+                // Loop through players that have placed a bet and offer hit or stand.
+                foreach (var currentPlayer in table.Players)
                 {
-                    Console.WriteLine("Player Hit or Stand? (Enter H or S): ");
+                    if (currentPlayer.WantsToPlay)
+                    {
+                        currentPlayer.ShowHand();
 
-                    var decision = Console.ReadLine();
-                    if (decision == "H" || decision == "h")
-                    {
-                        dealer.PlayerHitOrStand(player, table, false);
-                    }
-                    else if (decision == "S" || decision == "s")
-                    {
-                        dealer.PlayerHitOrStand(player, table, true);
+                        // If player has Blackjack pay winnings. 
+                        if (currentPlayer.Hand.IsBlackjack)
+                        {
+                            Console.WriteLine("Player has Blackjack - You Win!");
+                            currentPlayer.DepositWinnings(Convert.ToInt32(currentPlayer.Hand.BetOnHand * 2.5));
+                            break;
+                        }
+
+                        // Offer player chance to take more cards.
+                        while (!currentPlayer.IsStood && !currentPlayer.Hand.IsBust)
+                        {
+                            Console.WriteLine("Player Hit or Stand? (Enter H or S): ");
+
+                            var decision = Console.ReadLine();
+                            if (decision == "H" || decision == "h")
+                            {
+                                dealer.PlayerHitOrStand(currentPlayer, table, false);
+                            }
+                            else if (decision == "S" || decision == "s")
+                            {
+                                dealer.PlayerHitOrStand(currentPlayer, table, true);
+                            }
+                        }
                     }
                 }
 
-                if (!player.Hand.IsBust)
+
+                // If any players have stood dealer plays their hand.
+                if (table.Players.Any(x => x.IsStood))
                 {
                     dealer.PlayDealersHand(table);
                 }
 
-                if (player.Hand.Value > table.TableDealer.Hand.Value && !player.Hand.IsBust || table.TableDealer.Hand.IsBust)
+                // Each player hand is played against the dealers.
+                foreach (var currentPlayer in table.Players.Where(x => x.IsStood))
                 {
-                    Console.Write("You are a winner!!! \n\n");
-                    player.DepositWinnings(Convert.ToInt32(player.Hand.BetOnHand * 2));
-                    player.NumberOfWins ++;
-                }
-                else
-                {
-                    Console.Write("You lose!\n\n");
-                    player.NumberOfLosses ++;
-                }
+                    if (currentPlayer.Hand.Value > table.TableDealer.Hand.Value || table.TableDealer.Hand.IsBust)
+                    {
+                        Console.Write($"{currentPlayer.PlayerName} You are a winner!!! \n\n");
+                        currentPlayer.DepositWinnings(Convert.ToInt32(currentPlayer.Hand.BetOnHand * 2));
+                        currentPlayer.NumberOfWins++;
+                    }
+                    else
+                    {
+                        Console.Write($"{currentPlayer.PlayerName} You lose!\n\n");
+                        currentPlayer.NumberOfLosses++;
+                    }
 
-                foreach (var currentPlayer in table.Players)
-                {
                     currentPlayer.ShowPlayerStats();
                 }
+               
+                // Ask players is they want to play again. 
+                dealer.AskPlayersPlayAgain(table);
 
-                dealer.AskPlayersPlayAgain(table.Players);
+                // If no players want to play then end the game.
+                if (table.Players.All(x => !x.WantsToPlay))
+                {
+                    gameActive = false;
+                }
             }
 
             Console.WriteLine("Game Over");
-
         }
     }
 }
