@@ -66,25 +66,76 @@ namespace BlackjackSimulator.ConsoleUI
                     {
                         currentPlayer.ShowHand();
 
+                        // Check for Blackjack
+
                         // If player has Blackjack pay winnings. 
                         if (currentPlayer.Hand.IsBlackjack)
                         {
-                            Console.WriteLine("Player has Blackjack - You Win!");
+                            Console.WriteLine($"{currentPlayer.PlayerName} has Blackjack - You Win!");
                             currentPlayer.DepositWinnings(Convert.ToInt32(currentPlayer.Hand.BetOnHand * 2.5));
+                            currentPlayer.NumberOfWins++;
                             break;
+                        }
+
+                        // Offer chance to split if option available
+                        //dealer.CheckForSplitHand(currentPlayer, table);
+
+                        // Now have to check all player hands //////////////////////////
+
+
+
+
+                        // Offer chance to double if funds available
+                        if (currentPlayer.PlayerBank >= currentPlayer.Hand.BetOnHand)
+                        {
+                            var playerDecision = string.Empty;
+
+                            while (playerDecision == string.Empty)
+                            {
+                                Console.WriteLine($"{currentPlayer.PlayerName} Would you like to double down? Enter Y or N: ");
+                                playerDecision = Console.ReadLine().ToLower();
+
+                                switch (playerDecision)
+                                {
+                                    case "y":
+                                        currentPlayer.Hand.DoubleDown(currentPlayer);
+                                        currentPlayer.IsStood = true;
+                                        currentPlayer.Hand.AddCard(table.Shoe.TakeCard());
+                                        Console.WriteLine($"Bet on hand now {currentPlayer.Hand.BetOnHand}");
+                                        currentPlayer.ShowHand();
+                                        break;
+                                    case "n":
+                                        break;
+                                    default:
+                                        playerDecision = string.Empty;
+                                        break;
+                                }
+                                if (currentPlayer.Hand.IsBust)
+                                {
+                                    Console.Write($"{currentPlayer.PlayerName} has bust! You Lose.\n\n"); //Deal with disposal of cards.
+                                    currentPlayer.NumberOfLosses++;
+                                }
+                                else
+                                {
+                                    Console.WriteLine($"{currentPlayer.PlayerName} stood on {currentPlayer.Hand.Value}");
+                                }
+
+                                Console.WriteLine("To Continue. Press Any key");
+                                Console.ReadLine();
+                            }
                         }
 
                         // Offer player chance to take more cards.
                         while (!currentPlayer.IsStood && !currentPlayer.Hand.IsBust)
                         {
-                            Console.WriteLine("Player Hit or Stand? (Enter H or S): ");
+                            Console.WriteLine($"{currentPlayer.PlayerName} Hit or Stand? (Enter H or S): ");
 
-                            var decision = Console.ReadLine();
-                            if (decision == "H" || decision == "h")
+                            var decision = Console.ReadLine().ToLower();
+                            if (decision == "h")
                             {
                                 dealer.PlayerHitOrStand(currentPlayer, table, false);
                             }
-                            else if (decision == "S" || decision == "s")
+                            else if (decision == "s")
                             {
                                 dealer.PlayerHitOrStand(currentPlayer, table, true);
                             }
@@ -100,25 +151,45 @@ namespace BlackjackSimulator.ConsoleUI
                 }
 
                 // Each player hand is played against the dealers.
-                foreach (var currentPlayer in table.Players.Where(x => x.IsStood))
+                foreach (var currentPlayer in table.Players.Where(x => x.IsStood && !x.Hand.IsBust))
                 {
                     if (currentPlayer.Hand.Value > table.TableDealer.Hand.Value || table.TableDealer.Hand.IsBust)
                     {
+                        currentPlayer.ShowHand();
                         Console.Write($"{currentPlayer.PlayerName} You are a winner!!! \n\n");
                         currentPlayer.DepositWinnings(Convert.ToInt32(currentPlayer.Hand.BetOnHand * 2));
                         currentPlayer.NumberOfWins++;
                     }
+                    else if (currentPlayer.Hand.Value == table.TableDealer.Hand.Value)
+                    {
+                        currentPlayer.ShowHand();
+                        Console.Write($"{currentPlayer.PlayerName} You are a winner!!! \n\n");
+                        currentPlayer.DepositWinnings(Convert.ToInt32(currentPlayer.Hand.BetOnHand * 1));
+                        currentPlayer.NumberOfWins++;
+                    }
                     else
                     {
+                        currentPlayer.ShowHand();
                         Console.Write($"{currentPlayer.PlayerName} You lose!\n\n");
                         currentPlayer.NumberOfLosses++;
                     }
 
                     currentPlayer.ShowPlayerStats();
                 }
-               
-                // Ask players is they want to play again. 
-                dealer.AskPlayersPlayAgain(table);
+
+                // Check player banks and end game if everyone is bankrupt.
+                dealer.CheckPlayerBanks(table);
+
+                if(table.Players.All(x => x.IsBankrupt))
+                {
+                    gameActive = false;
+                }
+
+                // If players are not bankrupt ask players is they want to play again. 
+                if (table.Players.Any(x => !x.IsBankrupt))
+                {
+                    dealer.AskPlayersPlayAgain(table);
+                }
 
                 // If no players want to play then end the game.
                 if (table.Players.All(x => !x.WantsToPlay))

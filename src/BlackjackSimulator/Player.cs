@@ -21,7 +21,7 @@ namespace BlackjackSimulator
         public string PlayerName { get; private set; }
         public int PlayerBank => _playerBank;
         public IReadOnlyCollection<Card> Cards => Hand.Cards;
-
+        public List<Hand> PlayerHands;
         public Player(int startingBank, string playerName)
         {
             _playerBank = startingBank;
@@ -33,11 +33,6 @@ namespace BlackjackSimulator
             StartingBalance = startingBank;
             IsBankrupt = false;
             BetBeforeDeal = 0;
-        }
-
-        public void Split()
-        {
-            Hand.SplitHand();
         }
 
         public void PlaceBet(int takeFromBank)
@@ -79,7 +74,7 @@ namespace BlackjackSimulator
 
         public void ShowPlayerStats()
         {
-            Console.Write($"{PlayerName} Current Statistics:\nHands Played: {NumberOfHandsPlayed} Hands Won: {NumberOfWins} Hands Lost {NumberOfLosses}\n\n");
+            Console.Write($"{PlayerName} Current Statistics:\nHands Played: {NumberOfHandsPlayed}, Hands Won: {NumberOfWins}, Hands Lost {NumberOfLosses}\n\n");
         }
     }
 }

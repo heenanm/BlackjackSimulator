@@ -6,13 +6,13 @@ namespace BlackjackSimulator
 {
     public class Hand
     {
-        private List<Card> _splitCards; 
         private readonly List<Card> _cards;
         private static readonly Dictionary<Rank, int> _rankValues;
 
         public int BetOnHand { get; private set; }
-        public IReadOnlyCollection<Card> Cards => _cards;
-        public IReadOnlyCollection<Card> SplitCards => _splitCards;
+        public List<Card> Cards => _cards;
+        public bool IsSplit = false;
+        public bool IsStood = false;
         public bool IsBust => Value > 21;
         public bool IsBlackjack => Value == 21 && _cards.Count == 2;
         public bool IsPair => _cards.Count == 2 && _cards[0].Rank == _cards[1].Rank;
@@ -66,29 +66,25 @@ namespace BlackjackSimulator
             _cards.Add(card);
         }
 
-        public void SplitHand()
-        {
-            if (!IsPair) return;
-            _splitCards.Add(_cards[0]);
-            _cards.RemoveAt(0);
-        }
-
         public void InitialBetOnHand(Player player)
         {
             BetOnHand += player.BetBeforeDeal;
             player.BetBeforeDeal = 0;
         }
 
-        public void PlaceBetOnHand(Player player, int bet)
+        public void DoubleDown(Player player)
         {
-            player.BetPlaced = false;
+            player.PlaceBet(BetOnHand);
+            BetOnHand += BetOnHand;
+            IsStood = true;
+        }
 
-            if (player.PlayerBank < bet) return;
-
+        public void SplitHandBet(Player player, int bet)
+        {
             player.PlaceBet(bet);
             BetOnHand += bet;
-            player.BetPlaced = true;
         }
+
 
     }
 }
