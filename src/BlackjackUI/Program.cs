@@ -70,7 +70,7 @@ namespace BlackjackSimulator.ConsoleUI
                         if (currentPlayer.PlayerHands[0].IsBlackjack)
                         {
                             Console.WriteLine($"{currentPlayer.PlayerName} has Blackjack - You Win!");
-                            currentPlayer.DepositWinnings(Convert.ToInt32(currentPlayer.Hand.BetOnHand * 2.5));
+                            currentPlayer.DepositWinnings(Convert.ToInt32(currentPlayer.PlayerHands[0].BetOnHand * 2.5));
                             currentPlayer.NumberOfWins++;
                             break;
                         }
@@ -120,6 +120,22 @@ namespace BlackjackSimulator.ConsoleUI
 
                                     Console.WriteLine("To Continue. Press Any key");
                                     Console.ReadLine();
+                            }
+
+                            // Offer player chance to take more cards.
+                            while (!currentPlayer.IsStood && !hand.IsBust)
+                            {
+                                Console.WriteLine($"{currentPlayer.PlayerName} Hit or Stand? (Enter H or S): ");
+
+                                var decision = Console.ReadLine().ToLower();
+                                if (decision == "h")
+                                {
+                                    dealer.PlayerHitOrStand(currentPlayer, table, false);
+                                }
+                                else if (decision == "s")
+                                {
+                                    dealer.PlayerHitOrStand(currentPlayer, table, true);
+                                }
                             }
                         }
 

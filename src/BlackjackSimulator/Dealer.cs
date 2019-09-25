@@ -36,7 +36,7 @@ namespace BlackjackSimulator
             }
         }
 
-        public void ShowHand()
+        public void ShowHand() // now in Hand class.
         {
             foreach (var card in Cards)
             {
@@ -256,7 +256,7 @@ namespace BlackjackSimulator
             }
         }
 
-        public void CheckForBlackjack(Player player, Hand hand)
+        public void CheckForBlackjack(Player player, Hand hand) // use this method after refactoring.
         {
             if (hand.IsBlackjack)
             {
