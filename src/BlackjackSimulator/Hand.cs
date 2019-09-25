@@ -85,6 +85,31 @@ namespace BlackjackSimulator
             BetOnHand += bet;
         }
 
+        public void ShowHand(Player player)
+        {
+            Console.Write($"{player.PlayerName} Hand: ");
+            foreach (var card in Cards)
+            {
+                if (card.Suit == Suit.Hearts || card.Suit == Suit.Diamonds)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
 
+                    Console.Write($"{card} ");
+
+                    Console.ForegroundColor = ConsoleColor.White;
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Black;
+
+                    Console.Write($"{card} ");
+
+                    Console.ForegroundColor = ConsoleColor.White;
+                }
+            }
+
+            Console.Write($"Current Hand Value: {Value} Current bet on Hand {BetOnHand}\n\n");
+
+        }
     }
 }

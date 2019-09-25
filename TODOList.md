@@ -23,7 +23,7 @@ Create a console application to simulate the game of Blackjack using Object-Orie
 * ~~Each player starts with an opening balance~~
 * ~~Each player is trying beat the dealer (they aren't in direct competition with each other)~~
 * ~~Each player must place a bet before the hands are dealt~~
-* Players can't play if they don't have sufficient funds
+* ~~Players can't play if they don't have sufficient funds~~
 * ~~Each player is dealt their first card followed by the dealer before repeating the process for the second card~~
 * ~~Once all of the hands have been dealt, players take it in turns before the dealer gets their turn~~
 * ~~Players go bust if the value of their hand is above 21~~
@@ -32,9 +32,9 @@ Create a console application to simulate the game of Blackjack using Object-Orie
 * ~~If a player beats the dealer, they win 2 x bet~~
 * ~~If a player has Blackjack, they win 2.5 x bet~~
 * ~~If a player loses to the dealer, then lose 1 x bet~~
-* If a player draws with the dealer, they win 1 x bet
+* ~~If a player draws with the dealer, they win 1 x bet~~
 * ~~If a player chooses to hit, the dealer will deal them another card from the shoe~~
-* If a player chooses to stand, the dealer moves on to the next player
+* ~~If a player chooses to stand, the dealer moves on to the next player~~
 * If a player chooses to double (immediately after being dealt the hand or splitting the hand), they double the bet and only one subsequent card is dealt
 	* The player must have sufficient funds
 * If a player chooses to split (if the hand consists of two cards of the same rank), the hand is split and the player places the same bet on the second hand before two additional cards are dealt (one into each hand)

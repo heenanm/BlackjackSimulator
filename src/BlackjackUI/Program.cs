@@ -59,17 +59,15 @@ namespace BlackjackSimulator.ConsoleUI
                     dealer.FirstShowHand();
                 }
 
-                // Loop through players that have placed a bet and offer hit or stand.
+                // Loop through players that have placed a bet.
                 foreach (var currentPlayer in table.Players)
                 {
                     if (currentPlayer.WantsToPlay)
                     {
-                        currentPlayer.ShowHand();
-
-                        // Check for Blackjack
+                        currentPlayer.PlayerHands[0].ShowHand(currentPlayer);
 
                         // If player has Blackjack pay winnings. 
-                        if (currentPlayer.Hand.IsBlackjack)
+                        if (currentPlayer.PlayerHands[0].IsBlackjack)
                         {
                             Console.WriteLine($"{currentPlayer.PlayerName} has Blackjack - You Win!");
                             currentPlayer.DepositWinnings(Convert.ToInt32(currentPlayer.Hand.BetOnHand * 2.5));
@@ -77,10 +75,53 @@ namespace BlackjackSimulator.ConsoleUI
                             break;
                         }
 
-                        // Offer chance to split if option available
-                        //dealer.CheckForSplitHand(currentPlayer, table);
+                        // If not Blackjack Offer chance to split if option available
+                        dealer.CheckForSplitHand(currentPlayer, table);
 
-                        // Now have to check all player hands //////////////////////////
+                        // Now loop through and check all current player hands 
+                        foreach (var hand in currentPlayer.PlayerHands)
+                        {
+                            // Offer chance to double if funds available
+                            if (currentPlayer.PlayerBank >= hand.BetOnHand)
+                            {
+                                var playerDecision = string.Empty;
+
+                                while (playerDecision == string.Empty)
+                                {
+                                    Console.WriteLine($"{currentPlayer.PlayerName} Would you like to double down? Enter Y or N: ");
+                                    playerDecision = Console.ReadLine().ToLower();
+
+                                    switch (playerDecision)
+                                    {
+                                        case "y":
+                                            hand.DoubleDown(currentPlayer);
+                                            hand.IsStood = true;
+                                            hand.AddCard(table.Shoe.TakeCard());
+                                            Console.WriteLine($"Bet on hand now {hand.BetOnHand}");
+                                            hand.ShowHand(currentPlayer); // changed showhand method
+                                            break;
+                                        case "n":
+                                            break;
+                                        default:
+                                            playerDecision = string.Empty;
+                                            break;
+                                    }
+                                }
+                                    if (hand.IsBust)
+                                    {
+                                        Console.Write($"{currentPlayer.PlayerName} has bust! You Lose.\n\n"); //Deal with disposal of cards.
+                                        currentPlayer.NumberOfLosses++;
+                                    }
+
+                                    if (hand.IsStood)
+                                    {
+                                        Console.WriteLine($"{currentPlayer.PlayerName} stood on {hand.Value}");
+                                    }
+
+                                    Console.WriteLine("To Continue. Press Any key");
+                                    Console.ReadLine();
+                            }
+                        }
 
 
 

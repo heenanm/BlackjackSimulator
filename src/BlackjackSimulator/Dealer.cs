@@ -86,33 +86,6 @@ namespace BlackjackSimulator
             }
         }
 
-        public void InitialDeal(Table table)
-        {
-            foreach (var player in table.Players)
-            {
-                if (player.WantsToPlay && !player.IsBankrupt)
-                {
-                    player.Hand = new Hand();
-                    player.Hand.InitialBetOnHand(player);
-                    player.NumberOfHandsPlayed++;
-                    player.Hand.AddCard(table.Shoe.TakeCard());
-                }
-            }
-
-            Hand = new Hand();
-            Hand.AddCard(table.Shoe.TakeCard());
-
-            foreach (var player in table.Players)
-            {
-                if (player.WantsToPlay && !player.IsBankrupt)
-                {
-                    player.Hand.AddCard(table.Shoe.TakeCard());
-                }
-            }
-
-            Hand.AddCard(table.Shoe.TakeCard());
-        }
-
         public void AskPlayersToBet(Table table)
         {
             foreach (var player in table.Players)
@@ -152,14 +125,42 @@ namespace BlackjackSimulator
                                 Console.WriteLine("Insufficient funds to bet that amount!");
                                 betAmount = 0;
                             }
-                        }                        
-                      
+                        }
+
                         // Player must place bet before cards are dealt.
                         player.PlaceBet(betAmount);
                         player.BetBeforeDeal = betAmount;
                     }
                 }
             }
+        }
+
+        public void InitialDeal(Table table)
+        {
+            foreach (var player in table.Players)
+            {
+                if (player.WantsToPlay && !player.IsBankrupt)
+                {
+                    var hand = new Hand();
+                    hand.InitialBetOnHand(player);
+                    player.NumberOfHandsPlayed++;
+                    hand.AddCard(table.Shoe.TakeCard());
+                    player.PlayerHands.Add(hand);
+                }
+            }
+
+            Hand = new Hand();
+            Hand.AddCard(table.Shoe.TakeCard());
+
+            foreach (var player in table.Players)
+            {
+                if (player.WantsToPlay && !player.IsBankrupt)
+                {
+                    player.PlayerHands[0].AddCard(table.Shoe.TakeCard());
+                }
+            }
+
+            Hand.AddCard(table.Shoe.TakeCard());
         }
 
         public void AskPlayersPlayAgain(Table table)
@@ -218,9 +219,9 @@ namespace BlackjackSimulator
 
         public void CheckForSplitHand(Player player, Table table)
         {
-            foreach (var hand in player.PlayerHands)
+            for (var hand = 0; hand < player.PlayerHands.Count - 1; hand ++) // cant modify this while looping through with foreach changed to for loop.
             {
-                if (hand.IsPair && !hand.IsSplit && player.PlayerBank > hand.BetOnHand)
+                if (player.PlayerHands[hand].IsPair && !player.PlayerHands[hand].IsSplit && player.PlayerBank > player.PlayerHands[hand].BetOnHand)
                 {
                     var playerDecision = string.Empty;
 
@@ -234,14 +235,14 @@ namespace BlackjackSimulator
                             case "y":
                                 playerDecision = "y";
                                 var splitHand = new Hand();
-                                player.PlaceBet(hand.BetOnHand);
-                                splitHand.SplitHandBet(player, hand.BetOnHand);
-                                splitHand.AddCard(hand.Cards.ElementAt(1));
-                                hand.Cards.Remove(hand.Cards.ElementAt(1));
+                                player.PlaceBet(player.PlayerHands[hand].BetOnHand);
+                                splitHand.SplitHandBet(player, player.PlayerHands[hand].BetOnHand);
+                                splitHand.AddCard(player.PlayerHands[hand].Cards.ElementAt(1));
+                                player.PlayerHands[hand].Cards.Remove(player.PlayerHands[hand].Cards.ElementAt(1));
                                 splitHand.AddCard(table.Shoe.TakeCard());
                                 player.PlayerHands.Add(splitHand);
-                                hand.Cards.Add(table.Shoe.TakeCard());
-                                hand.IsSplit = true;
+                                player.PlayerHands[hand].Cards.Add(table.Shoe.TakeCard());
+                                player.PlayerHands[hand].IsSplit = true;
                                 break;
                             case "n":
                                 playerDecision = "n";
@@ -255,9 +256,9 @@ namespace BlackjackSimulator
             }
         }
 
-        public void CheckForBlackjack(Player player)
+        public void CheckForBlackjack(Player player, Hand hand)
         {
-            if (player.Hand.IsBlackjack)
+            if (hand.IsBlackjack)
             {
                 Console.WriteLine($"{player.PlayerName} has Blackjack - You Win!");
                 player.DepositWinnings(Convert.ToInt32(player.Hand.BetOnHand * 2.5));

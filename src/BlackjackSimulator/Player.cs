@@ -21,7 +21,7 @@ namespace BlackjackSimulator
         public string PlayerName { get; private set; }
         public int PlayerBank => _playerBank;
         public IReadOnlyCollection<Card> Cards => Hand.Cards;
-        public List<Hand> PlayerHands;
+        public List<Hand> PlayerHands = new List<Hand>();
         public Player(int startingBank, string playerName)
         {
             _playerBank = startingBank;
