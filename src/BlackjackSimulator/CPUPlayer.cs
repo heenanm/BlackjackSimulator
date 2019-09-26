@@ -4,7 +4,12 @@ using System.Text;
 
 namespace BlackjackSimulator
 {
-    class CPUPlayer
+    class CPUPlayer : Player
     {
+        CPUPlayer() : base(1000, "HAL")
+        {
+        }
+
+        
     }
 }

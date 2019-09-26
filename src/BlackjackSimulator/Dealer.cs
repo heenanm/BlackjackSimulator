@@ -98,7 +98,7 @@ namespace BlackjackSimulator
                     var betAmount = 0;
                     while (betAmount < table.MinimumBet)
                     {
-                        Console.WriteLine($"Table Minimum is: {table.MinimumBet}, How much would you like to bet?");
+                        Console.WriteLine($"{player.PlayerName} Table Minimum is: {table.MinimumBet}, How much would you like to bet?");
                         betAmount = int.Parse(Console.ReadLine());
                         if (betAmount > player.PlayerBank)
                         {
@@ -192,7 +192,6 @@ namespace BlackjackSimulator
             {
                 Console.Write($"{player.PlayerName} has bust! You Lose.\n\n"); //Deal with disposal of cards.
                 player.NumberOfLosses++;
-                player.ShowPlayerStats();
                 Console.WriteLine("To Continue Press Any key");
                 Console.ReadLine();
             }

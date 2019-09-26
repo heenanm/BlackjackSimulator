@@ -10,6 +10,7 @@ namespace BlackjackSimulator
 
         public int BetBeforeDeal { get; set; }
         public bool IsBankrupt { get; set; }
+        public int RoundStartBalance { get; set; }
         public int StartingBalance { get; set; }
         public int NumberOfWins { get; set; }
         public int NumberOfLosses { get; set; }
@@ -23,7 +24,6 @@ namespace BlackjackSimulator
         {
             _playerBank = startingBank;
             PlayerName = playerName;
-            //IsStood = false;
             NumberOfHandsPlayed = 0;
             NumberOfWins = 0;
             NumberOfLosses = 0;
@@ -44,7 +44,31 @@ namespace BlackjackSimulator
 
         public void ShowPlayerStats()
         {
-            Console.Write($"{PlayerName} Current Statistics:\nHands Played: {NumberOfHandsPlayed}, Hands Won: {NumberOfWins}, Hands Lost {NumberOfLosses}\n\n");
+            Console.Write($"{PlayerName} Current Statistics:\nHands Played: {NumberOfHandsPlayed}, Hands Won: {NumberOfWins}, Hands Lost {NumberOfLosses}\n");
+        }
+
+        public void ShowPlayerRoundStats()
+        {
+            var wonOrLost = "Won";
+            if (PlayerBank < RoundStartBalance)
+            {
+                wonOrLost = "Lost";
+            }
+
+            var winLossAmount = Math.Max(PlayerBank, RoundStartBalance) - Math.Min(PlayerBank, RoundStartBalance);
+            Console.WriteLine($"{PlayerName}: This round {wonOrLost} {winLossAmount}");
+        }
+
+        public void ShowPlayerBankStats()
+        {
+            var upOrDown = "Up";
+            if(PlayerBank < StartingBalance)
+            {
+                upOrDown = "Down";
+            }
+
+            var winLossAmount = Math.Max(PlayerBank, StartingBalance) - Math.Min(PlayerBank, StartingBalance);
+            Console.WriteLine($"Starting Balance: {StartingBalance}, Current Balance: {PlayerBank}, Result: {upOrDown} {winLossAmount}");
         }
     }
 }

@@ -41,6 +41,12 @@ namespace BlackjackSimulator.ConsoleUI
             //Start game loop 
             while (gameActive)
             {
+                // Update start of round player balances.
+                foreach (var player in table.Players)
+                {
+                    player.RoundStartBalance = player.PlayerBank;
+                }
+
                 // Dealer asks players for initial bets.
                 dealer.AskPlayersToBet(table);
 
@@ -58,11 +64,11 @@ namespace BlackjackSimulator.ConsoleUI
                 {
                     if (currentPlayer.WantsToPlay)
                     {
-                        currentPlayer.PlayerHands[0].ShowHand(currentPlayer);
-
                         // If player has Blackjack pay winnings. 
                         if (currentPlayer.PlayerHands[0].IsBlackjack)
                         {
+                            currentPlayer.PlayerHands[0].ShowHand(currentPlayer);
+
                             Console.WriteLine($"{currentPlayer.PlayerName} has Blackjack - You Win!");
                             currentPlayer.DepositWinnings(Convert.ToInt32(currentPlayer.PlayerHands[0].BetOnHand * 2.5));
                             currentPlayer.NumberOfWins++;
@@ -106,7 +112,6 @@ namespace BlackjackSimulator.ConsoleUI
                                     {
                                         Console.Write($"{currentPlayer.PlayerName} has bust! You Lose.\n\n"); //Deal with disposal of cards.
                                         currentPlayer.NumberOfLosses++;
-                                        currentPlayer.ShowPlayerStats();
                                         Console.WriteLine("To Continue Press Any key");
                                         Console.ReadLine();
 
@@ -176,11 +181,10 @@ namespace BlackjackSimulator.ConsoleUI
                         {
                             currentPlayer.NumberOfHandsPlayed++;
                         }
-                    }
 
-                    currentPlayer.ShowPlayerStats();
-                    Console.WriteLine("To Continue Press Any key");
-                    Console.ReadLine();
+                        Console.WriteLine("To Continue Press Any key");
+                        Console.ReadLine();
+                    }
                 }
 
                 // Check player banks and end game if everyone is bankrupt.
@@ -189,6 +193,15 @@ namespace BlackjackSimulator.ConsoleUI
                 if(table.Players.All(x => x.IsBankrupt))
                 {
                     gameActive = false;
+                }
+
+                // Show round statistics.
+                foreach (var player in table.Players.Where(x => !x.IsBankrupt))
+                {
+                    player.ShowPlayerStats();
+                    player.ShowPlayerRoundStats();
+                    player.ShowPlayerBankStats();
+                    Console.WriteLine("");
                 }
 
                 // If players are not bankrupt ask players is they want to play again. 

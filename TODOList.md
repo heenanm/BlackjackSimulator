@@ -35,10 +35,10 @@ Create a console application to simulate the game of Blackjack using Object-Orie
 * ~~If a player draws with the dealer, they win 1 x bet~~
 * ~~If a player chooses to hit, the dealer will deal them another card from the shoe~~
 * ~~If a player chooses to stand, the dealer moves on to the next player~~
-* If a player chooses to double (immediately after being dealt the hand or splitting the hand), they double the bet and only one subsequent card is dealt
-	* The player must have sufficient funds
-* If a player chooses to split (if the hand consists of two cards of the same rank), the hand is split and the player places the same bet on the second hand before two additional cards are dealt (one into each hand)
-	* The player must have sufficient funds
+* ~~If a player chooses to double (immediately after being dealt the hand or splitting the hand), they double the bet and only one subsequent card is dealt~~
+	* ~~The player must have sufficient funds~~
+* ~~If a player chooses to split (if the hand consists of two cards of the same rank), the hand is split and the player places the same bet on the second hand before two additional cards are dealt (one into each hand)~~
+	* ~~The player must have sufficient funds~~
 
 ## Requirements:
 
@@ -46,11 +46,11 @@ Create a console application to simulate the game of Blackjack using Object-Orie
 	* ~~Show each hand with colour depending on the suit (red/black)~~
 	* ~~Show the numerical value for each hand~~
 	* ~~Show the bet associated with each hand~~
-	* Show the amount won/lost after each game
+	* ~~Show the amount won/lost after each game~~
 	* ~~Show the number of hands played for each player~~
 	* ~~Show the number of wins for each player~~
 	* ~~Show the number of losses for each player~~
-	* Show the original vs current balance for each player (and whether they're up or down)
+	* ~~Show the original vs current balance for each player (and whether they're up or down)~~
 * ~~Human player~~
 * ~~CPU dealer~~
 * CPU player
