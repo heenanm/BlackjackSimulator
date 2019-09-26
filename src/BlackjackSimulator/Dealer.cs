@@ -68,10 +68,13 @@ namespace BlackjackSimulator
             Console.Write($"Dealers Hand: ");
             ShowHand();
             Console.Write($"Dealers Hand Value: {Hand.Value}\n\n");
+            Console.WriteLine($"Dealer stood on {Hand.Value}");
             if (Hand.IsBust)
             {
                 Console.Write("Dealer Busts!\n\n");
             }
+            Console.WriteLine("To Continue Press Any key");
+            Console.ReadLine();
         }
 
         // Dealer interactions with PLayers
@@ -90,47 +93,23 @@ namespace BlackjackSimulator
         {
             foreach (var player in table.Players)
             {
-                if (!player.IsBankrupt)
+                if (player.WantsToPlay && !player.IsBankrupt)
                 {
-                    var playerDecision = string.Empty;
-
-                    while (playerDecision == string.Empty)
+                    var betAmount = 0;
+                    while (betAmount < table.MinimumBet)
                     {
-                        Console.WriteLine($"{player.PlayerName} Would you like to Bet on this hand? Enter Y or N: ");
-                        playerDecision = Console.ReadLine().ToLower();
-
-                        switch (playerDecision)
+                        Console.WriteLine($"Table Minimum is: {table.MinimumBet}, How much would you like to bet?");
+                        betAmount = int.Parse(Console.ReadLine());
+                        if (betAmount > player.PlayerBank)
                         {
-                            case "y":
-                                player.WantsToPlay = true;
-                                break;
-                            case "n":
-                                player.WantsToPlay = false;
-                                break;
-                            default:
-                                playerDecision = string.Empty;
-                                break;
+                            Console.WriteLine("Insufficient funds to bet that amount!");
+                            betAmount = 0;
                         }
                     }
 
-                    if (player.WantsToPlay)
-                    {
-                        var betAmount = 0;
-                        while (betAmount < table.MinimumBet)
-                        {
-                            Console.WriteLine($"Table Minimum is: {table.MinimumBet}, How much would you like to bet?");
-                            betAmount = int.Parse(Console.ReadLine());
-                            if (betAmount > player.PlayerBank)
-                            {
-                                Console.WriteLine("Insufficient funds to bet that amount!");
-                                betAmount = 0;
-                            }
-                        }
-
-                        // Player must place bet before cards are dealt.
-                        player.PlaceBet(betAmount);
-                        player.BetBeforeDeal = betAmount;
-                    }
+                    // Player must place bet before cards are dealt.
+                    player.PlaceBet(betAmount);
+                    player.BetBeforeDeal = betAmount;
                 }
             }
         }
@@ -141,6 +120,7 @@ namespace BlackjackSimulator
             {
                 if (player.WantsToPlay && !player.IsBankrupt)
                 {
+                    player.PlayerHands = new List<Hand>();
                     var hand = new Hand();
                     hand.InitialBetOnHand(player);
                     player.NumberOfHandsPlayed++;
@@ -194,32 +174,33 @@ namespace BlackjackSimulator
             }
         }
 
-        public void PlayerHitOrStand(Player player, Table table, bool wantsToStand)
+        public void PlayerHitOrStand(Player player, Hand hand, Table table, bool wantsToStand)
         {
             if (wantsToStand)
             {
-                Console.Write($"{player.PlayerName} Stood on: {player.Hand.Value}\n\n");
-                player.IsStood = true;
-                Console.WriteLine("To Continue. Press Any key");
+                Console.Write($"{player.PlayerName} Stood on: {hand.Value}\n\n");
+                hand.IsStood = true;
+                Console.WriteLine("To Continue Press Any key");
                 Console.ReadLine();
                 return;
             }
 
-            player.Hand.AddCard(table.Shoe.TakeCard());
-            player.ShowHand();
+            hand.AddCard(table.Shoe.TakeCard());
+            hand.ShowHand(player);
 
-            if (player.Hand.IsBust)
+            if (hand.IsBust)
             {
                 Console.Write($"{player.PlayerName} has bust! You Lose.\n\n"); //Deal with disposal of cards.
                 player.NumberOfLosses++;
-                Console.WriteLine("To Continue. Press Any key");
+                player.ShowPlayerStats();
+                Console.WriteLine("To Continue Press Any key");
                 Console.ReadLine();
             }
         }
 
         public void CheckForSplitHand(Player player, Table table)
         {
-            for (var hand = 0; hand < player.PlayerHands.Count - 1; hand ++) // cant modify this while looping through with foreach changed to for loop.
+            for (var hand = 0; hand <= player.PlayerHands.Count - 1; hand ++) // cant modify this while looping through with foreach changed to for loop.
             {
                 if (player.PlayerHands[hand].IsPair && !player.PlayerHands[hand].IsSplit && player.PlayerBank > player.PlayerHands[hand].BetOnHand)
                 {
@@ -261,7 +242,7 @@ namespace BlackjackSimulator
             if (hand.IsBlackjack)
             {
                 Console.WriteLine($"{player.PlayerName} has Blackjack - You Win!");
-                player.DepositWinnings(Convert.ToInt32(player.Hand.BetOnHand * 2.5));
+                player.DepositWinnings(Convert.ToInt32(hand.BetOnHand * 2.5));
                 player.NumberOfWins++;
             }
         }
