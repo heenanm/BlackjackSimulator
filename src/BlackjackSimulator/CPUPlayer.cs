@@ -4,7 +4,7 @@ using System.Text;
 
 namespace BlackjackSimulator
 {
-    class CPUPlayer : Player
+    public class CPUPlayer : Player
     {
         CPUPlayer() : base(1000, "")
         {
@@ -14,8 +14,5 @@ namespace BlackjackSimulator
         {
 
         }
-
-
-        
     }
 }
