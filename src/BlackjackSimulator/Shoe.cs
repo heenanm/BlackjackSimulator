@@ -65,7 +65,7 @@ namespace BlackjackSimulator
             return card;
         }
 
-        public void DisposeCards(IReadOnlyCollection<Card> cards)
+        public void DisposeCards(List<Card> cards)
         {
             _disposedCards.AddRange(cards);
         }

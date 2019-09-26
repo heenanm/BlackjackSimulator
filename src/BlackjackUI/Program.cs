@@ -187,6 +187,23 @@ namespace BlackjackSimulator.ConsoleUI
                     }
                 }
 
+                // Dispose of cards used in the round.
+                foreach (var player in table.Players)
+                {
+                    foreach (var hand in player.PlayerHands)
+                    {
+                        var cards = hand.Cards;
+                        table.Shoe.DisposeCards(cards);
+                    }
+                    player.PlayerHands.Clear();
+                }
+
+                // If less than one deck remains shuffle the shoe
+                if (table.Shoe.Cards.Count < 52)
+                {
+                    table.Shoe.Shuffle();
+                }
+
                 // Check player banks and end game if everyone is bankrupt.
                 dealer.CheckPlayerBanks(table);
 

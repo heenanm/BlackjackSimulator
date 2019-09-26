@@ -203,6 +203,7 @@ namespace BlackjackSimulator
             {
                 if (player.PlayerHands[hand].IsPair && !player.PlayerHands[hand].IsSplit && player.PlayerBank > player.PlayerHands[hand].BetOnHand)
                 {
+                    player.PlayerHands[hand].ShowHand(player);
                     var playerDecision = string.Empty;
 
                     while (playerDecision == string.Empty)

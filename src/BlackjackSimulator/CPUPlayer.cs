@@ -6,9 +6,15 @@ namespace BlackjackSimulator
 {
     class CPUPlayer : Player
     {
-        CPUPlayer() : base(1000, "HAL")
+        CPUPlayer() : base(1000, "")
         {
         }
+
+        public void OfferedSplit()
+        {
+
+        }
+
 
         
     }
