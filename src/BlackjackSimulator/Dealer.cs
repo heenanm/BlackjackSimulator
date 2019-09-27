@@ -216,7 +216,6 @@ namespace BlackjackSimulator
                             case "y":
                                 playerDecision = "y";
                                 var splitHand = new Hand();
-                                player.PlaceBet(player.PlayerHands[hand].BetOnHand);
                                 splitHand.SplitHandBet(player, player.PlayerHands[hand].BetOnHand);
                                 splitHand.AddCard(player.PlayerHands[hand].Cards.ElementAt(1));
                                 player.PlayerHands[hand].Cards.Remove(player.PlayerHands[hand].Cards.ElementAt(1));

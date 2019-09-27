@@ -37,9 +37,9 @@ namespace BlackjackSimulator
             _playerBank -= takeFromBank;
         }
 
-        public void DepositWinnings(int bankWinnings)
+        public void DepositWinnings(int winnings)
         {
-            _playerBank += bankWinnings;
+            _playerBank += winnings;
         }
 
         public void ShowPlayerStats()

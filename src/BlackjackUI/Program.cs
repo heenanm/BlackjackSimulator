@@ -160,14 +160,14 @@ namespace BlackjackSimulator.ConsoleUI
                         {
                             hand.ShowHand(currentPlayer);
                             Console.Write($"{currentPlayer.PlayerName} You are a winner!!! \n\n");
-                            currentPlayer.DepositWinnings(Convert.ToInt32(hand.BetOnHand * 2));
+                            currentPlayer.DepositWinnings(hand.BetOnHand * 2);
                             currentPlayer.NumberOfWins++;
                         }
                         else if (hand.Value == table.TableDealer.Hand.Value)
                         {
                             hand.ShowHand(currentPlayer);
                             Console.Write($"{currentPlayer.PlayerName} You are a winner!!! \n\n");
-                            currentPlayer.DepositWinnings(Convert.ToInt32(hand.BetOnHand * 1));
+                            currentPlayer.DepositWinnings(hand.BetOnHand * 1);
                             currentPlayer.NumberOfWins++;
                         }
                         else
