@@ -17,6 +17,8 @@ namespace BlackjackSimulator.ConsoleUI
             Console.Write($"Minimum bet at this table is: {table.MinimumBet}\n\n");
 
             // Initialise players at the table.
+            var MaxNumberOfPlayers = 7;
+
             var numberOfPlayers = 0;
             while (numberOfPlayers <= 0 || numberOfPlayers > 7)
             {
