@@ -103,14 +103,6 @@ namespace BlackjackSimulator
             }
         }
 
-        //private static void PlaceInitialBet(Player player, int betAmount)
-        //{
-        //    player.PlaceBet(betAmount);
-        //    player.BetBeforeDeal = betAmount;
-        //}
-
-
-
         public void InitialDeal(Table table)
         {
             foreach (var player in table.Players)
@@ -173,8 +165,6 @@ namespace BlackjackSimulator
             }
         }
 
-       
-
         public void AskPlayersPlayAgain(Table table)
         {
             // Dealer asks players if they want to play again
@@ -183,8 +173,6 @@ namespace BlackjackSimulator
                 player.AskToPlayAgain();
             }
         }
-
-       
 
         public void PlayerHitOrStand(Player player, Hand hand, Table table, bool wantsToStand)
         {
