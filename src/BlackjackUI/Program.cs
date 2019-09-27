@@ -28,7 +28,7 @@ namespace BlackjackSimulator.ConsoleUI
             {
                 Console.WriteLine($"Enter Player {i} Name: ");
                 var playerName = Console.ReadLine();
-                var player = new Player(1000, playerName);
+                var player = new HumanPlayer(1000, playerName);
                 table.AddPlayer(player);
             }
             
@@ -85,44 +85,7 @@ namespace BlackjackSimulator.ConsoleUI
                             // Offer chance to double if funds available
                             if (currentPlayer.PlayerBank >= hand.BetOnHand)
                             {
-                                var playerDecision = string.Empty;
-
-                                while (playerDecision == string.Empty)
-                                {
-                                    Console.WriteLine($"{currentPlayer.PlayerName} Would you like to double down? Enter Y or N: ");
-                                    playerDecision = Console.ReadLine().ToLower();
-
-                                    switch (playerDecision)
-                                    {
-                                        case "y":
-                                            hand.DoubleDown(currentPlayer);
-                                            hand.IsStood = true;
-                                            hand.AddCard(table.Shoe.TakeCard());
-                                            Console.WriteLine($"Bet on hand now {hand.BetOnHand}");
-                                            hand.ShowHand(currentPlayer); // changed showhand method now in hand class.
-                                            break;
-                                        case "n":
-                                            break;
-                                        default:
-                                            playerDecision = string.Empty;
-                                            break;
-                                    }
-                                }
-                                    if (hand.IsBust)
-                                    {
-                                        Console.Write($"{currentPlayer.PlayerName} has bust! You Lose.\n\n"); //Deal with disposal of cards.
-                                        currentPlayer.NumberOfLosses++;
-                                        Console.WriteLine("To Continue Press Any key");
-                                        Console.ReadLine();
-
-                                    }
-
-                                    if (hand.IsStood && !hand.IsBust)
-                                    {
-                                        Console.WriteLine($"{currentPlayer.PlayerName} stood on {hand.Value}");
-                                        Console.WriteLine("To Continue Press Any key");
-                                        Console.ReadLine();
-                                    }
+                                dealer.OfferPlayerChanceToDouble(table, currentPlayer, hand);
                             }
 
                             // Offer player chance to take more cards.
@@ -236,5 +199,7 @@ namespace BlackjackSimulator.ConsoleUI
 
             Console.WriteLine("Game Over");
         }
+
+       
     }
 }

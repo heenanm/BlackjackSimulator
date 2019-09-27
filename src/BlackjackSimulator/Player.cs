@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace BlackjackSimulator
 {
-    public class Player
+    public abstract class Player
     {
         private int _playerBank;
 
@@ -16,6 +16,7 @@ namespace BlackjackSimulator
         public int NumberOfLosses { get; set; }
         public int NumberOfHandsPlayed { get; set; }
         public bool WantsToPlay = true;
+        public bool IsPlayingThisRound => WantsToPlay && !IsBankrupt;
         public bool BetPlaced { get; set; }
         public string PlayerName { get; private set; }
         public int PlayerBank => _playerBank;
@@ -30,6 +31,12 @@ namespace BlackjackSimulator
             StartingBalance = startingBank;
             IsBankrupt = false;
             BetBeforeDeal = 0;
+        }
+
+        public void PlaceInitialBet(int betAmount)
+        {
+            PlaceBet(betAmount);
+            BetBeforeDeal = betAmount;
         }
 
         public void PlaceBet(int takeFromBank)
@@ -70,5 +77,9 @@ namespace BlackjackSimulator
             var winLossAmount = Math.Max(PlayerBank, StartingBalance) - Math.Min(PlayerBank, StartingBalance);
             Console.WriteLine($"Starting Balance: {StartingBalance}, Current Balance: {PlayerBank}, Result: {upOrDown} {winLossAmount}");
         }
+
+        public abstract void AskToPlayAgain();
+        public abstract int GetPlayerBetAmount(int minimumBet);
+        public abstract bool AskToDouble();
     }
 }

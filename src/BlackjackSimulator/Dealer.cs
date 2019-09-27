@@ -93,26 +93,23 @@ namespace BlackjackSimulator
         {
             foreach (var player in table.Players)
             {
-                if (player.WantsToPlay && !player.IsBankrupt)
+                if (player.IsPlayingThisRound)
                 {
-                    var betAmount = 0;
-                    while (betAmount < table.MinimumBet)
-                    {
-                        Console.WriteLine($"{player.PlayerName} Table Minimum is: {table.MinimumBet}, How much would you like to bet?");
-                        betAmount = int.Parse(Console.ReadLine());
-                        if (betAmount > player.PlayerBank)
-                        {
-                            Console.WriteLine("Insufficient funds to bet that amount!");
-                            betAmount = 0;
-                        }
-                    }
+                    var betAmount = player.GetPlayerBetAmount(table.MinimumBet);
 
                     // Player must place bet before cards are dealt.
-                    player.PlaceBet(betAmount);
-                    player.BetBeforeDeal = betAmount;
+                    player.PlaceInitialBet(betAmount);
                 }
             }
         }
+
+        //private static void PlaceInitialBet(Player player, int betAmount)
+        //{
+        //    player.PlaceBet(betAmount);
+        //    player.BetBeforeDeal = betAmount;
+        //}
+
+
 
         public void InitialDeal(Table table)
         {
@@ -143,36 +140,51 @@ namespace BlackjackSimulator
             Hand.AddCard(table.Shoe.TakeCard());
         }
 
+        public void OfferPlayerChanceToDouble(Table table, Player player, Hand hand)
+        {
+            var DecisionToDouble = player.AskToDouble();
+
+            if (DecisionToDouble)
+            {
+                hand.DoubleDown(player);
+                hand.AddCard(table.Shoe.TakeCard());
+                if (!hand.IsBust)
+                {
+                    hand.IsStood = true;
+                }
+                Console.WriteLine($"Bet on hand now {hand.BetOnHand}");
+                hand.ShowHand(player);
+            }
+
+            if (hand.IsBust)
+            {
+                Console.Write($"{player.PlayerName} has bust! You Lose.\n\n"); 
+                player.NumberOfLosses++;
+                Console.WriteLine("To Continue Press Any key");
+                Console.ReadLine();
+
+            }
+
+            if (hand.IsStood && !hand.IsBust)
+            {
+                Console.WriteLine($"{player.PlayerName} stood on {hand.Value}");
+                Console.WriteLine("To Continue Press Any key");
+                Console.ReadLine();
+            }
+        }
+
+       
+
         public void AskPlayersPlayAgain(Table table)
         {
             // Dealer asks players if they want to play again
             foreach (var player in table.Players)
             {
-                if (!player.IsBankrupt)
-                {
-                    var playerDecision = string.Empty;
-
-                    while (playerDecision == string.Empty) 
-                    {
-                        Console.WriteLine($"{player.PlayerName}: Do you want to play again? Enter Y or N: ");
-                        playerDecision = Console.ReadLine().ToLower();
-
-                        switch (playerDecision)
-                        {
-                            case "y":
-                                player.WantsToPlay = true;
-                                break;
-                            case "n":
-                                player.WantsToPlay = false;
-                                break;
-                            default:
-                                playerDecision = string.Empty;
-                                break;
-                        }
-                    }
-                }
+                player.AskToPlayAgain();
             }
         }
+
+       
 
         public void PlayerHitOrStand(Player player, Hand hand, Table table, bool wantsToStand)
         {

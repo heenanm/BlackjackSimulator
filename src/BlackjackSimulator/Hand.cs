@@ -76,7 +76,6 @@ namespace BlackjackSimulator
         {
             player.PlaceBet(BetOnHand);
             BetOnHand += BetOnHand;
-            IsStood = true;
         }
 
         public void SplitHandBet(Player player, int bet)
@@ -84,6 +83,26 @@ namespace BlackjackSimulator
             player.PlaceBet(bet);
             BetOnHand += bet;
         }
+
+        //public void InitialBetOnHand(CPUPlayer cPUPlayer)
+        //{
+        //    BetOnHand += cPUPlayer.BetBeforeDeal;
+        //    cPUPlayer.BetBeforeDeal = 0;
+        //}
+
+        //public void DoubleDown(CPUPlayer cPUPlayer)
+        //{
+        //    cPUPlayer.PlaceBet(BetOnHand);
+        //    BetOnHand += BetOnHand;
+        //    IsStood = true;
+        //}
+
+        //public void SplitHandBet(CPUPlayer cPUPlayer, int bet)
+        //{
+        //    cPUPlayer.PlaceBet(bet);
+        //    BetOnHand += bet;
+        //}
+
 
         public void ShowHand(Player player)
         {
@@ -111,5 +130,32 @@ namespace BlackjackSimulator
             Console.Write($"Current Hand Value: {Value} Current bet on Hand {BetOnHand}\n\n");
 
         }
+
+        //public void ShowHand(CPUPlayer player)
+        //{
+        //    Console.Write($"{player.PlayerName} Hand: ");
+        //    foreach (var card in Cards)
+        //    {
+        //        if (card.Suit == Suit.Hearts || card.Suit == Suit.Diamonds)
+        //        {
+        //            Console.ForegroundColor = ConsoleColor.Red;
+
+        //            Console.Write($"{card} ");
+
+        //            Console.ForegroundColor = ConsoleColor.White;
+        //        }
+        //        else
+        //        {
+        //            Console.ForegroundColor = ConsoleColor.Black;
+
+        //            Console.Write($"{card} ");
+
+        //            Console.ForegroundColor = ConsoleColor.White;
+        //        }
+        //    }
+
+        //    Console.Write($"Current Hand Value: {Value} Current bet on Hand {BetOnHand}\n\n");
+
+        //}
     }
 }
