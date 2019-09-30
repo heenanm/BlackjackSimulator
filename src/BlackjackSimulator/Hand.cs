@@ -111,7 +111,7 @@ namespace BlackjackSimulator
             {
                 if (card.Suit == Suit.Hearts || card.Suit == Suit.Diamonds)
                 {
-                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.ForegroundColor = ConsoleColor.DarkRed;
 
                     Console.Write($"{card} ");
 

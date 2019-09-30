@@ -20,7 +20,7 @@ namespace BlackjackSimulator
             Console.Write("Dealer Hand: ?? ");
             if (Cards.ElementAt(1).Suit == Suit.Hearts || Cards.ElementAt(1).Suit == Suit.Diamonds)
             {
-                Console.ForegroundColor = ConsoleColor.Red;
+                Console.ForegroundColor = ConsoleColor.DarkRed;
 
                 Console.Write($"{Cards.ElementAt(1)}\n\n");
 
@@ -42,7 +42,7 @@ namespace BlackjackSimulator
             {
                 if (card.Suit == Suit.Hearts || card.Suit == Suit.Diamonds)
                 {
-                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.ForegroundColor = ConsoleColor.DarkRed;
 
                     Console.Write($"{card} ");
 
